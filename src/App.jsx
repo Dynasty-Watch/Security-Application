@@ -26,11 +26,11 @@ import "./theme/variables.css";
 
 setupIonicReact();
 
-const App: React.FC = () => (
+const App = () => (
   <IonApp>
     <IonReactRouter>
       <IonRouterOutlet>
-        <Route path="/" component={Login} exact />
+        <Route path="/" component={Home} exact />
         <Route path="/register" component={Register} exact />
         <Route path="/home" component={Home} exact />
         <Route path="/login" component={Login} exact />

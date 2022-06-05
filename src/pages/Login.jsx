@@ -45,6 +45,7 @@ const Login = () => {
         
       if (error) console.log(error);
       else setSession(session.access_token)
+      
       if(session != null) history.push("./Home");
       
     } catch (error) {
