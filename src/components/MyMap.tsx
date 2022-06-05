@@ -1,43 +1,68 @@
+import {
+  IonPage,
+  IonContent,
+  IonHeader,
+  IonToolbar,
+  IonButtons,
+  IonMenuButton,
+  IonTitle,
+  IonSpinner,
+} from "@ionic/react";
 import React, { useRef, useEffect } from "react";
-import { GoogleMap } from "@capacitor/google-maps";
+import GoogleMapReact from "google-map-react";
+const mapKey = "AIzaSyD2QU_op6CGlNb5OjFKoVbCIGvbWCmFaNY";
 
-const MyMap: React.FC = () => {
-  const mapRef = useRef<HTMLElement>();
-  let newMap: GoogleMap;
-
-  useEffect(() => {
-    createMap;
-  });
-
-  async function createMap() {
-    if (!mapRef.current) return;
-
-    newMap = await GoogleMap.create({
-      id: "my-cool-map",
-      element: mapRef.current,
-      apiKey: "AIzaSyD2QU_op6CGlNb5OjFKoVbCIGvbWCmFaNY",
-      config: {
-        center: {
-          lat: 33.6,
-          lng: -117.9,
-        },
-        width: 200,
-        height: 200,
-        zoom: 8,
-      },
-    });
-  }
+const MyMap = (props: any) => {
+  const center = {
+    lat: 12.934485599999999,
+    lng: 77.6192336,
+  };
 
   return (
-    <capacitor-google-map
-      ref={mapRef}
-      style={{
-        display: "inline-block",
-        width: 275,
-        height: 400,
-      }}
-    ></capacitor-google-map>
+    <>
+      <IonPage id="main">
+        <IonHeader>
+          <IonToolbar color="dark">
+            <IonButtons slot="start">
+              <IonMenuButton></IonMenuButton>
+            </IonButtons>
+            <IonTitle slot="start">Map Geolocation</IonTitle>
+          </IonToolbar>
+        </IonHeader>
+        <IonContent>
+          <div className="GEoMap">
+            <GoogleMapReact
+              bootstrapURLKeys={{
+                key: "AIzaSyD2QU_op6CGlNb5OjFKoVbCIGvbWCmFaNY",
+              }}
+              defaultCenter={center}
+              defaultZoom={16}
+            >
+              <AnyReactComponent />
+            </GoogleMapReact>
+          </div>
+        </IonContent>
+      </IonPage>
+    </>
   );
 };
+
+const AnyReactComponent = () => (
+  <div
+    style={{
+      color: "white",
+      background: "red",
+      padding: "10px",
+      display: "inline-flex",
+      textAlign: "center",
+      alignItems: "center",
+      justifyContent: "center",
+      borderRadius: "100%",
+      transform: "translate(-80%, -100%)",
+    }}
+  >
+    <div className="pointer"></div>
+  </div>
+);
 
 export default MyMap;

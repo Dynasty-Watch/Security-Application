@@ -13,7 +13,6 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { supabase } from "../SupabaseClient";
 import { useHistory } from "react-router-dom";
-import ExploreContainer from "../components/ExploreContainer";
 import "./Home.css";
 
 const Register: React.FC = () => {
@@ -25,21 +24,38 @@ const Register: React.FC = () => {
   const [password, setPassword] = useState();
   const [cPassword, setCPassword] = useState();
   const [showLoading, setShowLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
+  const emailFormat =
+    "/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:.[a-zA-Z0-9-]+)*$/";
   const history = useHistory();
 
-  const registerUser = async () => {
+  const registerUser = async (e: any) => {
+    e.preventDefault();
+    setShowLoading(true);
+
+    if (password != cPassword) setErrorMessage("Passwords do not match");
+    if (email != emailFormat) setErrorMessage("Email is not valid");
+
     try {
-      setShowLoading(true);
-      const { error, user } = await supabase.auth.signUp({ email, password });
-      if (error) {
-        console.log(error);
-      } else {
-        console.log(user?.id);
-        console.log("check your email to verify signup");
-        history.push("./Login");
-      }
+      const { user } = await supabase.auth.signUp({
+        email: email,
+        password: password,
+      });
+
+      const { error } = await supabase.from("SecurityInfo").insert({
+        userId: user?.id,
+        firstName: name,
+        lastName: surname,
+        email: email,
+        phone: cellNo,
+        securityId: securityID,
+        Password: password,
+      });
+
+      if (error) console.log(error);
+      else history.push("./Login");
     } catch (error) {
-      alert(error);
+      console.log(error);
     } finally {
       setShowLoading(false);
     }
@@ -93,7 +109,7 @@ const Register: React.FC = () => {
           onIonChange={(e: any) => setCPassword(e.target.value)}
         />
 
-        <IonButton onClick={registerUser} color="dark">
+        <IonButton onClick={(e) => registerUser(e)} color="dark">
           Sign Up
         </IonButton>
 

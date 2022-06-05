@@ -14,36 +14,43 @@ import {
   IonText,
   IonLoading
 } from "@ionic/react";
-import React, { useEffect, useState } from "react";
-import { star } from "ionicons/icons";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import ExploreContainer from "../components/ExploreContainer";
-import { toast } from "../components/toast";
 import {supabase} from "../SupabaseClient"
 import {useHistory} from  "react-router-dom";
 import Logo from "../images/Dynasty Watch logo.jpeg";
 import "./login.css";
 
 const Login = () => {
-  const [email, setEmail] = useState();
+  const [userEmail, setUserEmail] = useState();
   const [password, setPassword] = useState();
-  const [showLoading,setShowLoading] = useState(false)
+  const [showLoading,setShowLoading] = useState(false);
+  const [session,setSession] = useState(null);
+  const [errorMessage, setErrorMessage] = useState("");
+  const emailFormat =
+  "/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:.[a-zA-Z0-9-]+)*$/";
   const history = useHistory();
 
-  const loginUser = async email => {
-    try {
-        setShowLoading(true);
+  const loginUser = async (e) => {
+    e.preventDefault();
+    setShowLoading(true);
 
-        const { error } = await supabase.auth.signIn({ email});
-        if (error) {
-          console.log(error);
-        } else {
-          history.push("./Home")
-        }
+    if (userEmail != emailFormat) setErrorMessage("Email is not valid");
+
+    try {
+      const {session,error } = await supabase.auth.signIn({ 
+        email : userEmail,
+        password : password
+      });
+        
+      if (error) console.log(error);
+      else setSession(session.access_token)
+      if(session != null) history.push("./Home");
+      
     } catch (error) {
-        alert(error);
+      alert(error);
     } finally {
-        setShowLoading(false);
+      setShowLoading(false);
     }
 }
 
@@ -69,7 +76,7 @@ const Login = () => {
                 <IonInput
                   color="dark"
                   placeholder="Email:"
-                  onIonChange={(e) => setEmail(e.target.value)}
+                  onIonChange={(e) => setUserEmail(e.target.value)}
                 />
               </IonCol>
             </IonRow>
@@ -93,19 +100,22 @@ const Login = () => {
         <div className="button">
           <IonButton
             color="dark"
-            onClick={(e) => {
-              e.preventDefault();
-              loginUser(email);
-            }}
+            onClick={(e) => loginUser(e)}
           >
             Login
           </IonButton>
         </div>
 
-        <p>
-          <IonText color="dark">Don't have an account?</IonText>{" "}
-          <Link to="/register">click here</Link>
-        </p>
+        <IonCol className="ion-align-self-center">
+          <p>
+            <IonText color="dark">Don't have an account? </IonText>
+            <Link to="/register">click here</Link>
+          </p>
+          <p>
+            <IonText color="dark">Forgot your credentials? </IonText>
+            <Link to="/register">click here</Link>
+          </p>
+        </IonCol>
       </IonContent>
     </IonPage>
   );

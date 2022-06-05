@@ -9,7 +9,6 @@ import {
   IonToolbar,
 } from "@ionic/react";
 import React, { useEffect, useState } from "react";
-import ExploreContainer from "../components/ExploreContainer";
 import MyMap from "../components/MyMap";
 import "./Home.css";
 
