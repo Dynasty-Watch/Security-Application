@@ -8,7 +8,18 @@ import {
   IonToolbar,
   useIonModal,
   useIonViewWillEnter,
+  IonTabs,
+  IonTab,
+  IonTabButton,
+  IonMenu,
+  IonList,
+  IonListHeader,
+  IonMenuToggle,
+  IonIcon,
+  IonItem,
+  IonLabel
 } from "@ionic/react";
+import { globeOutline, heartOutline, locationOutline, navigateOutline, phonePortraitOutline, home } from "ionicons/icons";
 import { useRef, useState } from "react";
 import "./Home.css";
 
@@ -19,12 +30,12 @@ import { MarkerInfoWindow } from "../components/MarkerInfoWindow";
 const Home = () => {
   // state and variables
   let newMap;
-  const key = "AIzaSyD2QU_op6CGlNb5OjFKoVbCIGvbWCmFaNY";
+  const key = "AIzaSyAIB2cC62_gWE8woaK9xqoKDjoLSht_5zQ";
   const mapRef = useRef(null);
   const [selectedMarker, setSelectedMarker] = useState(null);
   const [present, dismiss] = useIonModal(MarkerInfoWindow, {marker: selectedMarker,});
   const [mapConfig, setMapConfig] = useState({
-    zoom: 10,
+    zoom: 12,
     center: {
       lat: markers[0].lat,
       lng: markers[0].lng,
@@ -41,7 +52,7 @@ const Home = () => {
     onDidDismiss: () => dismiss(),
   };
 
-  // marker event
+  //marker event
   const markerClick = (marker) => {
     setSelectedMarker(
       markers.filter(
@@ -78,7 +89,34 @@ const Home = () => {
   };
 
   return (
+    <>
+    <IonMenu side="start" contentId="main-content">
+        <IonHeader>
+          <IonToolbar color="primary">
+            <IonTitle>Menu</IonTitle>
+          </IonToolbar>
+        </IonHeader>
+
+        <IonContent>
+          <IonList>
+            <IonListHeader>
+              Navigate
+            </IonListHeader>
+            <IonMenuToggle autoHide={false}>
+              <IonItem button>
+                <IonIcon slot="start" icon={home}></IonIcon>
+                <IonLabel>
+                  Home
+                </IonLabel>
+              </IonItem>
+            </IonMenuToggle>
+          </IonList>
+        </IonContent>
+        
+      </IonMenu>
     <IonPage>
+      
+
       <IonHeader>
         <IonToolbar>
           <IonTitle>Alerts</IonTitle>
@@ -90,14 +128,19 @@ const Home = () => {
             <IonTitle size="large">Alerts</IonTitle>
           </IonToolbar>
         </IonHeader>
-
-        <IonRow>
-          <IonCol size="12">
-            <capacitor-google-map ref={mapRef} id="map"></capacitor-google-map>
+          <IonCol>
+            <IonRow >
+            <capacitor-google-map ref={mapRef} id="map" style={{
+              display: 'inline-block',
+              width: 310,
+              height: 590
+            }}></capacitor-google-map>
+            </IonRow>
           </IonCol>
-        </IonRow>
       </IonContent>
     </IonPage>
+    </>
+    
   );
 };
 

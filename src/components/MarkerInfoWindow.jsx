@@ -42,7 +42,7 @@ export const MarkerInfoWindow = ({marker, dismiss}) => {
 				<IonRow>
 					<IonButton>
 						<IonIcon icon={heartOutline} />&nbsp;
-						Favourite
+						Accept
 					</IonButton>
 					<IonButton>
 						<IonIcon icon={navigateOutline} />&nbsp;
