@@ -16,19 +16,19 @@ import {
 } from "@ionic/react";
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import {supabase} from "../SupabaseClient"
-import {useHistory} from  "react-router-dom";
+import { supabase } from "../SupabaseClient"
+import { useHistory } from "react-router-dom";
 import Logo from "../images/Dynasty Watch logo.jpeg";
 import "./login.css";
 
 const Login = () => {
   const [userEmail, setUserEmail] = useState();
   const [password, setPassword] = useState();
-  const [showLoading,setShowLoading] = useState(false);
-  const [session,setSession] = useState(null);
+  const [showLoading, setShowLoading] = useState(false);
+  const [session, setSession] = useState(null);
   const [errorMessage, setErrorMessage] = useState("");
   const emailFormat =
-  "/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:.[a-zA-Z0-9-]+)*$/";
+    "/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:.[a-zA-Z0-9-]+)*$/";
   const history = useHistory();
 
   const loginUser = async (e) => {
@@ -38,22 +38,22 @@ const Login = () => {
     if (userEmail != emailFormat) setErrorMessage("Email is not valid");
 
     try {
-      const {session,error } = await supabase.auth.signIn({ 
-        email : userEmail,
-        password : password
+      const { session, error } = await supabase.auth.signIn({
+        email: userEmail,
+        password: password
       });
-        
+
       if (error) console.log(error);
       else setSession(session.access_token)
-      
-      if(session != null) history.push("./Home");
-      
+
+      if (session != null) history.push("./Home");
+
     } catch (error) {
       alert(error);
     } finally {
       setShowLoading(false);
     }
-}
+  }
 
   return (
     <IonPage>
@@ -63,7 +63,7 @@ const Login = () => {
         </IonToolbar>
       </IonHeader>
       <IonContent className="ion-padding" color="secondary">
-        <IonLoading  
+        <IonLoading
           isOpen={showLoading}
           onDidDismiss={() => setShowLoading(false)}
           message={'Loading...'}
@@ -114,7 +114,7 @@ const Login = () => {
           </p>
           <p>
             <IonText color="dark">Forgot your credentials? </IonText>
-            <Link to="/register">click here</Link>
+            <Link to="/forgotPassword">click here</Link>
           </p>
         </IonCol>
       </IonContent>
