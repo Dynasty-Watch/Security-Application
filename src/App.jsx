@@ -1,5 +1,5 @@
 import { Redirect, Route } from "react-router-dom";
-import { IonApp, IonRouterOutlet, setupIonicReact } from "@ionic/react";
+import { IonApp, IonRouterOutlet, setupIonicReact, IonTab } from "@ionic/react";
 import { IonReactRouter } from "@ionic/react-router";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
@@ -36,7 +36,6 @@ const App = () => (
         <Route path="/home" component={Home} exact />
         <Route path="/login" component={Login} exact />
         <Route path="/forgotPassword" component={ForgotPassword} exact />
-        <></>
       </IonRouterOutlet>
     </IonReactRouter>
   </IonApp>

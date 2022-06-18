@@ -17,131 +17,58 @@ import {
   IonMenuToggle,
   IonIcon,
   IonItem,
-  IonLabel
+  IonLabel,
+  IonApp,
+  IonRouterOutlet,
+  IonTabBar
 } from "@ionic/react";
-import { globeOutline, heartOutline, locationOutline, navigateOutline, phonePortraitOutline, home } from "ionicons/icons";
-import { useRef, useState } from "react";
-import "./Home.css";
+import { Redirect, Route } from "react-router-dom";
+import { IonReactRouter } from "@ionic/react-router";
 
-import { GoogleMap } from "@capacitor/google-maps";
-import { markers } from "../data";
-import { MarkerInfoWindow } from "../components/MarkerInfoWindow";
+import Tab1 from "./Tab1";
+import Tab2 from "./Tab2";
+import Tab3 from "./Tab3";
 
+//Routes Component after authentication
 const Home = () => {
-  // state and variables
-  let newMap;
-  const key = "AIzaSyAIB2cC62_gWE8woaK9xqoKDjoLSht_5zQ";
-  const mapRef = useRef(null);
-  const [selectedMarker, setSelectedMarker] = useState(null);
-  const [present, dismiss] = useIonModal(MarkerInfoWindow, {marker: selectedMarker,});
-  const [mapConfig, setMapConfig] = useState({
-    zoom: 12,
-    center: {
-      lat: markers[0].lat,
-      lng: markers[0].lng,
-    },
-  });
-
-  const addMapMarkers = () => markers.forEach((marker) => addMapMarker(marker));
-  useIonViewWillEnter(() => createMap());
-
-  const modalOptions = {
-    initialBreakpoint: 0.4,
-    breakpoints: [0, 0.4],
-    backdropBreakpoint: 0,
-    onDidDismiss: () => dismiss(),
-  };
-
-  //marker event
-  const markerClick = (marker) => {
-    setSelectedMarker(
-      markers.filter(
-        (m) => m.lat === marker.latitude && m.lng === marker.longitude
-      )[0]
-    );
-    present(modalOptions);
-  };
-
-  // markers
-  const addMapMarker = async (marker) => {
-    await newMap.addMarker({
-      coordinate: {
-        lat: marker.lat,
-        lng: marker.lng,
-      },
-      title: marker.title,
-    });
-  };
-
-  // map
-  const createMap = async () => {
-    if (!mapRef.current) return;
-
-    newMap = await GoogleMap.create({
-      id: "google-map",
-      element: mapRef.current,
-      apiKey: key,
-      config: mapConfig,
-    });
-
-    newMap.setOnMarkerClickListener((marker) => markerClick(marker));
-    addMapMarkers();
-  };
-
   return (
-    <>
-    <IonMenu side="start" contentId="main-content">
-        <IonHeader>
-          <IonToolbar color="primary">
-            <IonTitle>Menu</IonTitle>
-          </IonToolbar>
-        </IonHeader>
+    <IonApp>
+      <Tab1 />
+      <IonReactRouter>
+        <IonTabs>
+          <IonRouterOutlet>
+            <Route exact path="/tab1">
+              <Tab1 />
+            </Route>
+            <Route exact path="/tab2">
+              <Tab2 />
+            </Route>
+            <Route path="/tab3">
+              <Tab3 />
+            </Route>
+            <Route exact path="/">
+              <Redirect to="/tab1" />
+            </Route>
+          </IonRouterOutlet>
 
-        <IonContent>
-          <IonList>
-            <IonListHeader>
-              Navigate
-            </IonListHeader>
-            <IonMenuToggle autoHide={false}>
-              <IonItem button>
-                <IonIcon slot="start" icon={home}></IonIcon>
-                <IonLabel>
-                  Home
-                </IonLabel>
-              </IonItem>
-            </IonMenuToggle>
-          </IonList>
-        </IonContent>
-        
-      </IonMenu>
-    <IonPage>
-      
-
-      <IonHeader>
-        <IonToolbar>
-          <IonTitle>Alerts</IonTitle>
-        </IonToolbar>
-      </IonHeader>
-      <IonContent fullscreen>
-        <IonHeader collapse="condense">
-          <IonToolbar>
-            <IonTitle size="large">Alerts</IonTitle>
-          </IonToolbar>
-        </IonHeader>
-          <IonCol>
-            <IonRow >
-            <capacitor-google-map ref={mapRef} id="map" style={{
-              display: 'inline-block',
-              width: 310,
-              height: 590
-            }}></capacitor-google-map>
-            </IonRow>
-          </IonCol>
-      </IonContent>
-    </IonPage>
-    </>
-    
-  );
+          <IonTabBar slot="bottom">
+            <IonTabButton selected tab="tab1" href="/tab1">
+              {/* <IonIcon icon={triangle} /> */}
+              <IonLabel>Tab 1</IonLabel>
+            </IonTabButton>
+            <IonTabButton tab="tab2" href="/tab2">
+              {/* <IonIcon icon={ellipse} /> */}
+              <IonLabel>Tab 2</IonLabel>
+            </IonTabButton>
+            <IonTabButton tab="tab3" href="/tab3">
+              {/* <IonIcon icon={square} /> */}
+              <IonLabel>Tab 3</IonLabel>
+            </IonTabButton>
+          </IonTabBar>
+        </IonTabs>
+      </IonReactRouter>
+    </IonApp>
+  )
 };
 
 export default Home;
