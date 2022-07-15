@@ -32,7 +32,7 @@ const Tab3 = () => {
             <IonPage>
                 <IonHeader>
                     <IonToolbar>
-                        <IonTitle>Profile</IonTitle>
+                        <IonTitle>Settings</IonTitle>
                     </IonToolbar>
                 </IonHeader>
                 <IonContent fullscreen>

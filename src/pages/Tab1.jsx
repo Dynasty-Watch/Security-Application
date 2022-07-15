@@ -33,7 +33,7 @@ const Tab1 = () => {
             <IonPage>
                 <IonHeader>
                     <IonToolbar>
-                        <IonTitle>Request Age One</IonTitle>
+                        <IonTitle>Request Page One</IonTitle>
                     </IonToolbar>
                 </IonHeader>
                 <IonContent fullscreen>
@@ -43,9 +43,7 @@ const Tab1 = () => {
                         </IonToolbar>
                     </IonHeader>
                     <IonCol>
-                        <IonRow >
                             <Map />
-                        </IonRow>
                     </IonCol>
                 </IonContent>
             </IonPage>
