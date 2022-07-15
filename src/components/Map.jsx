@@ -68,9 +68,9 @@ const Map = () => {
     return (
         <capacitor-google-map ref={mapRef} id="map" style={{
             display: 'inline-block',
-            // width: '100%',
-            // height: '100%',
-            // position : 'absolute'
+            width: '300px',
+            height: '570px',
+            position: 'absolute'
         }}></capacitor-google-map >
     );
 }

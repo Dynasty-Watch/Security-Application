@@ -26,8 +26,10 @@ import {
     IonTabBar
 } from "@ionic/react";
 import Map from "../components/Map";
+import { _markers } from "../data";
 
 const Tab1 = () => {
+    _markers();
     return (
         <>
             <IonPage>
@@ -43,7 +45,7 @@ const Tab1 = () => {
                         </IonToolbar>
                     </IonHeader>
                     <IonCol>
-                            <Map />
+                        <Map />
                     </IonCol>
                 </IonContent>
             </IonPage>

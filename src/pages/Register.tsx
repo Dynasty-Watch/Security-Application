@@ -54,7 +54,6 @@ const Register: React.FC = () => {
 
       if (error) console.log(error);
       else history.push("./Login");
-      
     } catch (error) {
       console.log(error);
     } finally {
