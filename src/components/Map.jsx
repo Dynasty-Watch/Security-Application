@@ -2,12 +2,15 @@ import React, { useState, useRef, useEffect } from "react";
 import { useIonModal, useIonViewWillEnter } from '@ionic/react';
 import { GoogleMap } from "@capacitor/google-maps";
 import { markers } from "../data";
+import { UseMarkers } from "../data";
+import { supabase } from "../SupabaseClient";
 import { MarkerInfoWindow } from "../components/MarkerInfoWindow";
 
 const Map = () => {
     let newMap;
     const key = "AIzaSyAIB2cC62_gWE8woaK9xqoKDjoLSht_5zQ";
     const mapRef = useRef(null);
+    let requests;
 
     const [selectedMarker, setSelectedMarker] = useState(null);
     const [present, dismiss] = useIonModal(MarkerInfoWindow, { marker: selectedMarker, });
@@ -18,6 +21,21 @@ const Map = () => {
             lng: markers[0].lng,
         },
     });
+
+    // fetch requests from database
+    useEffect(async () => {
+
+        let { data: EmergencyRequest, error } = await supabase
+            .from('EmergencyRequest')
+            .select('*')
+            .eq('Accepted', false)
+
+        if (error) throw new (error.message)
+        if (EmergencyRequest == null) throw new ("No Requests at the moment")
+
+        console.log(EmergencyRequest)
+        requests = EmergencyRequest;
+    }, [])
 
     const addMapMarkers = () => markers.forEach((marker) => addMapMarker(marker));
     useIonViewWillEnter(() => createMap());;

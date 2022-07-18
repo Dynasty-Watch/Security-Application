@@ -10,9 +10,9 @@ export const MarkerInfoWindow = ({ marker, dismiss }) => {
 				<IonRow className="ion-margin-bottom">
 					<IonCol size="12">
 						<IonLabel>
-							<h1>{marker.title}</h1>
+							<h1>{marker.CrimeType}</h1>
 							<></>
-							<IonNote>{marker.description}</IonNote>
+							<IonNote>{marker.Summary}</IonNote>
 						</IonLabel>
 					</IonCol>
 				</IonRow>
@@ -25,13 +25,14 @@ export const MarkerInfoWindow = ({ marker, dismiss }) => {
 					<IonCol size="10">{marker.address}</IonCol>
 				</IonRow>
 
-				<IonRow className="ion-justify-content-start ion-align-items-center">
+				{/* <IonRow className="ion-justify-content-start ion-align-items-center">
 					<IonCol size="2">
 						<IonIcon icon={globeOutline} color="primary" style={{ fontSize: "1.5rem" }} />
 					</IonCol>
 
 					<IonCol size="10">{marker.website}</IonCol>
-				</IonRow>
+				</IonRow> */}
+
 				<IonRow className="ion-justify-content-start ion-align-items-center">
 					<IonCol size="2">
 						<IonIcon icon={phonePortraitOutline} color="primary" style={{ fontSize: "1.5rem" }} />
@@ -41,13 +42,13 @@ export const MarkerInfoWindow = ({ marker, dismiss }) => {
 				</IonRow>
 
 				<IonRow>
-					<IonButton>
+					<IonButton onClick={dismiss}>
 						<IonIcon icon={heartOutline} />&nbsp;
 						Accept
 					</IonButton>
 					<IonButton>
 						<IonIcon icon={navigateOutline} />&nbsp;
-						Navigate
+						Accept
 					</IonButton>
 				</IonRow>
 			</IonGrid>

@@ -1,32 +1,32 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { supabase } from "../SupabaseClient";
 
-export const _markers = () => {
-    // const [lat, setLat] = useState(null);
-    // const [lng, setLng] = useState(null);
-    // const [title, setTitle] = useState("");
-    // const [description, setDescription] = useState("");
-    // const [address, setAddress] = useState("");
-    // const [website, setWebsite] = useState("");
-    const [requests, SetRequests] = useState([])
+export const UseMarkers = () => {
+    const [requests, setRequests] = useState([])
 
-    const FetchEmergencyRequest = async () => {
-        let { data: EmergencyRequest, error } = await supabase
-            .from('EmergencyRequest')
-            .select("*")
-            .is('Accepted', false)
-            .then()
+    useEffect(async () => {
+        try {
+            let { data: EmergencyRequest, error } = await supabase
+                .from('EmergencyRequest')
+                .select('*')
 
-        console.log(requests)
-    }
-    FetchEmergencyRequest();
+            if (error) throw new (error.message);
+            if (EmergencyRequest == null) throw new ("No requests yet");
+
+            setRequests(EmergencyRequest);
+            console.log(requests);
+
+        } catch (error) {
+            console.log(error.message);
+        }
+    }, [markers])
 }
 
 
 
 export const markers = [
     // Format resembles database table structure
-    { lat: -26.1861, lng: 27.9959, title: "Assult", description: "CampusLorem ipsum dolor sit amet.", address: "122 Kingsway Rd, Auckland Park", website: "Lorem ipsum dolor sit amet consectetur, adipisicing elit.", phone: "072 926 6253" },
-    { lat: -26.1941, lng: 27.9969, title: "Hijack", description: "CampusLorem ipsum dolor sit amet.", address: "68 Ararat Street, Wesdene", website: "Lorem ipsum dolor sit amet consectetur, adipisicing elit.", phone: "084 926 7728" },
+    { lat: -26.1861, lng: 27.9959, CrimeType: "Assult", Summary: "CampusLorem ipsum dolor sit amet.", address: "122 Kingsway Rd, Auckland Park", website: "Lorem ipsum dolor sit amet consectetur, adipisicing elit.", phone: "072 926 6253" },
+    { lat: -26.1941, lng: 27.9969, CrimeType: "Hijack", Summary: "CampusLorem ipsum dolor sit amet.", address: "68 Ararat Street, Wesdene", website: "Lorem ipsum dolor sit amet consectetur, adipisicing elit.", phone: "084 926 7728" },
 
 ];

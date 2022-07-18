@@ -23,13 +23,15 @@ import {
     IonRouterOutlet,
     Route,
     Redirect,
-    IonTabBar
+    IonTabBar,
+    IonButton
 } from "@ionic/react";
 import Map from "../components/Map";
-import { _markers } from "../data";
+import { supabase } from "../SupabaseClient";
+import { UseMarkers } from "../data";
+import React, { useState, useEffect } from "react";
 
 const Tab1 = () => {
-    _markers();
     return (
         <>
             <IonPage>
@@ -47,6 +49,7 @@ const Tab1 = () => {
                     <IonCol>
                         <Map />
                     </IonCol>
+
                 </IonContent>
             </IonPage>
         </>
