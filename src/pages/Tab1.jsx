@@ -29,9 +29,20 @@ import {
 import Map from "../components/Map";
 import { supabase } from "../SupabaseClient";
 import { UseMarkers } from "../data";
+import { Geolocation } from "@capacitor/geolocation";
 import React, { useState, useEffect } from "react";
 
 const Tab1 = () => {
+
+    useEffect(() => {
+        printCurrentPosition();
+    }, [])
+
+    const printCurrentPosition = async () => {
+        const coordinates = await Geolocation.getCurrentPosition();
+        console.log('Current position:', coordinates);
+    };
+
     return (
         <>
             <IonPage>
