@@ -14,6 +14,8 @@ const Map = () => {
 
     const [selectedMarker, setSelectedMarker] = useState(null);
     const [present, dismiss] = useIonModal(MarkerInfoWindow, { marker: selectedMarker, });
+
+    // config on render
     const [mapConfig, setMapConfig] = useState({
         zoom: 12,
         center: {
@@ -24,7 +26,6 @@ const Map = () => {
 
     // fetch requests from database
     useEffect(async () => {
-
         let { data: EmergencyRequest, error } = await supabase
             .from('EmergencyRequest')
             .select('*')
