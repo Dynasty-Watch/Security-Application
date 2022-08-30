@@ -4,13 +4,13 @@ import { globeOutline, heartOutline, locationOutline, navigateOutline, phonePort
 export const MarkerInfoWindow = ({ marker, dismiss }) => {
 
 	return (
-		<IonContent>
+		<IonContent key={marker.markerID}>
 			<IonGrid className="ion-padding">
 
 				<IonRow className="ion-margin-bottom">
 					<IonCol size="12">
 						<IonLabel>
-							<h1>{marker.CrimeType}</h1>
+							<h1>{marker.title}</h1>
 							<></>
 							<IonNote>{marker.Summary}</IonNote>
 						</IonLabel>

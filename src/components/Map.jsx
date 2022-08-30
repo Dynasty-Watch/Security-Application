@@ -26,6 +26,8 @@ const Map = () => {
 
     // fetch requests from database
     useEffect(async () => {
+        createMap();
+
         let { data: EmergencyRequest, error } = await supabase
             .from('EmergencyRequest')
             .select('*')
@@ -36,10 +38,23 @@ const Map = () => {
 
         console.log(EmergencyRequest)
         requests = EmergencyRequest;
+
+        // add markers
+        requests.forEach((location) => {
+            newMap.addMarker({
+                coordinate: {
+                    lat: location.RequestLat,
+                    lng: location.RequestLng
+                },
+                title: location.CrimeType
+            });
+        });
+
+        newMap.setOnMarkerClickListener((requests) => markerClick(requests));
     }, [])
 
-    const addMapMarkers = () => markers.forEach((marker) => addMapMarker(marker));
-    useIonViewWillEnter(() => createMap());;
+    //const addMapMarkers = () => markers.forEach((marker) => addMapMarker(marker));
+    //useIonViewWillEnter(() => createMap());
 
     const modalOptions = {
         initialBreakpoint: 0.4,
@@ -50,24 +65,28 @@ const Map = () => {
 
     //marker event
     const markerClick = (marker) => {
-        setSelectedMarker(
-            markers.filter(
-                (m) => m.lat === marker.latitude && m.lng === marker.longitude
-            )[0]
-        );
+        // setSelectedMarker(
+        //     markers.filter(
+        //         (m) => m.lat === marker.latitude && m.lng === marker.longitude
+        //     )[0]
+        // );
+        setSelectedMarker(marker)
+        console.log(marker)
         present(modalOptions);
     };
 
     // Add markers to map
-    const addMapMarker = async (marker) => {
-        await newMap.addMarker({
-            coordinate: {
-                lat: marker.lat,
-                lng: marker.lng,
-            },
-            title: marker.title,
-        });
-    };
+    // const addMapMarker = async (marker) => {
+    //     await newMap.addMarker({
+    //         coordinate: {
+    //             lat: marker.lat,
+    //             lng: marker.lng,
+    //         },
+    //         title: marker.title,
+    //     });
+
+
+    // };
 
     // map
     const createMap = async () => {
@@ -80,8 +99,8 @@ const Map = () => {
             config: mapConfig,
         });
 
-        newMap.setOnMarkerClickListener((marker) => markerClick(marker));
-        addMapMarkers();
+        //newMap.setOnMarkerClickListener((marker) => markerClick(marker));
+        //addMapMarkers();
     };
 
     return (
