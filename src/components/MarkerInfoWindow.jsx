@@ -1,13 +1,13 @@
-/* eslint-disable no-unused-vars */
 import { IonButton, IonCol, IonContent, IonGrid, IonIcon, IonLabel, IonNote, IonRow } from '@ionic/react';
 import { heartOutline, locationOutline, navigateOutline, phonePortraitOutline } from "ionicons/icons";
-import React, { useState, useEffect} from 'react';
-import Map from './Map';
-export const MarkerInfoWindow = ({ marker, dismiss }) => {
-	
-
-	  let [showInfo1, setShowInfo] = useState(false);
-
+//import { useState  } from 'react';
+export const MarkerInfoWindow = ({ marker, dismiss, page}) => {
+       
+    const handleClick = () =>{
+		let setPage;
+        setPage(2);
+        console.log("Clicked");
+    }; 
 	return (
 		<IonContent key={marker.markerID}>
 			<IonGrid className="ion-padding">
@@ -51,8 +51,8 @@ export const MarkerInfoWindow = ({ marker, dismiss }) => {
 						<IonIcon icon={heartOutline} />&nbsp;
 						Accept
 					</IonButton>
-					<IonButton onClick={()=> {setShowInfo(true)}}>
-						<IonIcon icon={navigateOutline} />&nbsp;
+					<IonButton {...page} onClick={handleClick}>
+						<IonIcon icon={navigateOutline}/>&nbsp;
 						Accept
 					</IonButton>
 				</IonRow>

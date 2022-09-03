@@ -1,22 +1,98 @@
+/* eslint-disable no-undef */
+/* eslint-disable eqeqeq */
 /* eslint-disable new-parens */
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable no-unused-vars */
 import React, { useState, useRef, useEffect } from "react";
-import { useIonModal, useIonViewWillEnter } from '@ionic/react';
+import { useIonModal,  IonInput, IonButtons, IonHeader, IonPage, IonButton, IonCol, IonContent, IonGrid, IonIcon, IonLabel, IonNote, IonRow } from '@ionic/react';
 import { GoogleMap } from "@capacitor/google-maps";
 import { markers } from "../data";
 import { UseMarkers } from "../data";
 import { supabase } from "../SupabaseClient";
-import { MarkerInfoWindow } from "../components/MarkerInfoWindow";
+import { heartOutline, locationOutline, navigateOutline, phonePortraitOutline } from "ionicons/icons";
+import {
+    useJsApiLoader,
+    GoogleMap as Rmap,
+    Marker ,
+    Autocomplete,
+    DirectionsRenderer,
+  } from '@react-google-maps/api'
+  import { Geolocation } from "@capacitor/geolocation";
+  const libraries = ['places'];
+
 
 const Map = () => {
+    const [page, setPage] = useState(1);
+     useEffect(() => {
+        setPage(1);
+      }, []);
+    const MarkerInfoWindow = ({ marker, dismiss, page}) => {
+       
+        const handleClick = () =>{
+            setPage(2);
+            console.log("Clicked");
+        }; 
+        return (
+            <IonContent key={marker.markerID}>
+                <IonGrid className="ion-padding">
+    
+                    <IonRow className="ion-margin-bottom">
+                        <IonCol size="12">
+                            <IonLabel>
+                                <h1>{marker.title}</h1>
+                                <></>
+                                <IonNote>{marker.Summary}</IonNote>
+                            </IonLabel>
+                        </IonCol>
+                    </IonRow>
+    
+                    <IonRow className="ion-justify-content-start ion-align-items-center">
+                        <IonCol size="2">
+                            <IonIcon icon={locationOutline} color="primary" style={{ fontSize: "1.5rem" }} />
+                        </IonCol>
+    
+                        <IonCol size="10">{marker.address}</IonCol>
+                    </IonRow>
+    
+                    {/* <IonRow className="ion-justify-content-start ion-align-items-center">
+                        <IonCol size="2">
+                            <IonIcon icon={globeOutline} color="primary" style={{ fontSize: "1.5rem" }} />
+                        </IonCol>
+    
+                        <IonCol size="10">{marker.website}</IonCol>
+                    </IonRow> */}
+    
+                    <IonRow className="ion-justify-content-start ion-align-items-center">
+                        <IonCol size="2">
+                            <IonIcon icon={phonePortraitOutline} color="primary" style={{ fontSize: "1.5rem" }} />
+                        </IonCol>
+    
+                        <IonCol size="10">{marker.phone}</IonCol>
+                    </IonRow>
+    
+                    <IonRow>
+                        <IonButton onClick={dismiss}>
+                            <IonIcon icon={heartOutline} />&nbsp;
+                            Accept
+                        </IonButton>
+                        <IonButton {...page} onClick={handleClick}>
+                            <IonIcon icon={navigateOutline}/>&nbsp;
+                            Accept
+                        </IonButton>
+                    </IonRow>
+                </IonGrid>
+            </IonContent>
+        );
+    };
+    
     let newMap;
     const key = "AIzaSyAIB2cC62_gWE8woaK9xqoKDjoLSht_5zQ";
     const mapRef = useRef(null);
     let requests;
-
+    
+   
     const [selectedMarker, setSelectedMarker] = useState(null);
-    const [present, dismiss] = useIonModal(MarkerInfoWindow, { marker: selectedMarker, });
+    const [present, dismiss] = useIonModal(MarkerInfoWindow, { marker: selectedMarker, page: page, });
 
     // config on render
     const [mapConfig, setMapConfig] = useState({
@@ -106,13 +182,101 @@ const Map = () => {
         //addMapMarkers();
     };
 
+    const { isLoaded } = useJsApiLoader({
+        googleMapsApiKey: "AIzaSyAIB2cC62_gWE8woaK9xqoKDjoLSht_5zQ",
+        libraries,
+      });
+      const [map, setMap] = useState(/** @type google.maps.Map */ (null))
+  const [directionsResponse, setDirectionsResponse] = useState(null)
+  const [distance, setDistance] = useState('')
+  const [duration, setDuration] = useState('')
+  const [ position,setPosition] = useState({
+    latitude : 0,
+    longitude: 0,
+});
+useEffect(() => {
+    getLocation();
+}, []);
+
+const getLocation = async () => {
+    await Geolocation.checkPermissions()
+    .then(() => Geolocation.getCurrentPosition())
+    .then((val) => {
+        setPosition({
+    
+        latitude : val.coords.latitude,
+        longitude : val.coords.longitude,
+        });
+    });
+};
+
+  /** @type React.MutableRefObject<HTMLInputElement> */
+  const destiantionRef = useRef()
+
+
+
+  async function calculateRoute() {
+    if (destiantionRef.current.value === '') {
+      return
+    }
+    // eslint-disable-next-line no-undef
+    const directionsService = new google.maps.DirectionsService()
+    const results = await directionsService.route({
+        origin: new google.maps.LatLng(position.latitude, position.longitude),
+      destination: destiantionRef.current.value,
+      // eslint-disable-next-line no-undef
+      travelMode: google.maps.TravelMode.DRIVING,
+    })
+    setDirectionsResponse(results)
+    setDistance(results.routes[0].legs[0].distance.text)
+    setDuration(results.routes[0].legs[0].duration.text)
+  };
+
     return (
+        <div>
+        { page == 1 && (
+        <>
         <capacitor-google-map ref={mapRef} id="map" style={{
             display: 'inline-block',
             width: '300px',
             height: '570px',
             position: 'absolute'
         }}></capacitor-google-map >
+        </>)} 
+        
+        {page == 2 && (
+            <>
+            <Autocomplete>
+              <IonInput type='text' placeholder='Destination' ref={destiantionRef} />
+            </Autocomplete>
+            <IonButton  type='submit' onClick={calculateRoute}>
+              Calculate Route
+            </IonButton>
+            <p>Distance: {distance} </p>
+          <p>Duration: {duration} </p>
+            <Rmap
+          center={{
+            lat: position.latitude,
+            lng: position.longitude,
+        }}
+          zoom={15}
+          mapContainerStyle={{ width: '100%', height: '100%' }}
+         
+          onLoad={map => setMap(map)}
+        >
+          <Marker position={{
+                                    lat: position.latitude,
+                                    lng: position.longitude,
+                            }}
+                        />
+          {directionsResponse && (
+            <DirectionsRenderer directions={directionsResponse} />
+          )}
+        </Rmap>
+           </>
+        )}
+        
+        </div>
     );
 }
 
