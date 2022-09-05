@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable no-undef */
 
-import { IonInput, IonButton, IonContent,IonButtons, IonHeader, IonPage, IonTitle, IonToolbar, IonMenuButton } from "@ionic/react"
+import { IonLoading, IonButton, IonContent,IonButtons, IonHeader, IonPage, IonTitle, IonToolbar, IonMenuButton } from "@ionic/react"
 import {
     useJsApiLoader,
     GoogleMap as Rmap,
@@ -11,9 +11,11 @@ import {
   } from '@react-google-maps/api'
   import { useRef, useState , useEffect} from 'react'
   import { Geolocation } from "@capacitor/geolocation";
+import { Link } from "react-router-dom";
   const libraries = ['places'];
 
 const Tab2 = () => {
+  const [showLoading, setShowLoading] = useState(true);
     const { isLoaded } = useJsApiLoader({
         googleMapsApiKey: "AIzaSyAsbwt4GElIq_C9duQZxcb2tiX3luBGuRo",
         libraries,
@@ -22,6 +24,9 @@ const Tab2 = () => {
   const [directionsResponse, setDirectionsResponse] = useState(null)
   const [distance, setDistance] = useState('')
   const [duration, setDuration] = useState('')
+  const [status, setStatus] = useState({
+    Accepted: true,
+  })
   const [cpostion, setCpostion] = useState({
     lati: 0,
     longi: 0,
@@ -85,6 +90,34 @@ const getLocation = async () => {
     destiantionRef.current.value = ''
   }
 
+  const updateStatus = async (e) => {
+		e?.preventDefault();
+	
+		console.log('update ');
+		await showLoading();
+	
+		try {
+		  const user = supabase.auth.user();
+	
+		  const updates = {
+			userId: user.id,
+			...status,
+		  };
+	
+		  let { error } = await supabase.from('EmergencyRequest').upsert(updates, {
+			returning: 'minimal', // Don't return the value after inserting
+		  });
+	
+		  if (error) {
+			throw error;
+		  }
+		} catch (error) {
+		  showToast({ message: error.message, duration: 5000 });
+		} finally {
+		  await hideLoading();
+		};
+	  };
+
     return(
         <IonPage>
             <IonHeader>
@@ -102,9 +135,11 @@ const getLocation = async () => {
             <IonButton type='submit' onClick={calculateRoute}>
               Calculate Route
             </IonButton> 
-            <IonButton>Done</IonButton></div>
+            <IonButton href="/home">Done</IonButton></div>
             <p>Distance: {distance} </p>
           <p>Duration: {duration} </p>
+          <IonLoading isOpen={showLoading} onDidDismiss={()=> setShowLoading(false)} message={"Loading"} duration={1000}></IonLoading>
+           
             <Rmap
           center={{
             lat: position.latitude,

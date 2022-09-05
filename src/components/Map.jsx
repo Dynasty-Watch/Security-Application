@@ -4,7 +4,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable no-unused-vars */
 import React, { useState, useRef, useEffect } from "react";
-import { useIonModal,  IonInput, IonButtons, IonHeader, IonPage, IonButton, IonCol, IonContent, IonGrid, IonIcon, IonLabel, IonNote, IonRow } from '@ionic/react';
+import { useIonModal, IonLoading ,IonButton, IonCol, IonContent, IonGrid, IonIcon, IonLabel, IonNote, IonRow } from '@ionic/react';
 import { GoogleMap } from "@capacitor/google-maps";
 import { markers } from "../data";
 import { UseMarkers } from "../data";
@@ -26,11 +26,14 @@ const Map = () => {
      useEffect(() => {
         setPage(1);
       }, []);
+      const [showLoading, setShowLoading] = useState(false);
     const MarkerInfoWindow = ({ marker, dismiss, page}) => {
        
         const handleClick = () =>{
             setPage(2);
             console.log("Clicked");
+            setShowLoading(true)
+            dismiss();
         }; 
         return (
             <IonContent key={marker.markerID}>
@@ -241,6 +244,8 @@ async function calculateRoute() {
             position: 'absolute'
         }}></capacitor-google-map >
         </>)} 
+
+        
         
         {page == 2 && isLoaded && (
             <>
@@ -248,9 +253,10 @@ async function calculateRoute() {
             <IonButton type='submit' onClick={calculateRoute}>
               Calculate Route
             </IonButton> 
-            <IonButton>Done</IonButton></div>
+            <IonButton href="/home">Done</IonButton></div>
             <p>Distance: {distance} </p>
           <p>Duration: {duration} </p>
+          <IonLoading isOpen={showLoading} onDidDismiss={()=> setShowLoading(false)} message={"Loading"} duration={5000}></IonLoading>
             <Rmap
           center={{
             lat: position.latitude,
