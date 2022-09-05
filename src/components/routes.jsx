@@ -13,9 +13,9 @@ import {
   import { Geolocation } from "@capacitor/geolocation";
   const libraries = ['places'];
 
-const Requests = () => {
+const Routes = () => {
     const { isLoaded } = useJsApiLoader({
-        googleMapsApiKey: "AIzaSyAIB2cC62_gWE8woaK9xqoKDjoLSht_5zQ",
+        googleMapsApiKey: "AIzaSyAsbwt4GElIq_C9duQZxcb2tiX3luBGuRo",
         libraries,
       });
       const [map, setMap] = useState(/** @type google.maps.Map */ (null))
@@ -63,6 +63,7 @@ const getLocation = async () => {
       // eslint-disable-next-line no-undef
       travelMode: google.maps.TravelMode.DRIVING,
     })
+    
     setDirectionsResponse(results)
     setDistance(results.routes[0].legs[0].distance.text)
     setDuration(results.routes[0].legs[0].duration.text)
@@ -79,11 +80,21 @@ const getLocation = async () => {
 
     return(
         <IonPage>
+            <IonHeader>
+                <IonButtons>
+                    <IonMenuButton/>
+                    <IonToolbar>
+                        <IonTitle>
+                            routes
+                        </IonTitle>
+                    </IonToolbar>
+                </IonButtons>
+            </IonHeader>
             <IonContent>
             <Autocomplete>
               <IonInput type='text' placeholder='Destination' ref={destiantionRef} />
             </Autocomplete>
-            <IonButton colorScheme='pink' type='submit' onClick={calculateRoute}>
+            <IonButton type='submit' onClick={calculateRoute}>
               Calculate Route
             </IonButton>
             <p>Distance: {distance} </p>
@@ -111,4 +122,4 @@ const getLocation = async () => {
         </IonPage>
         );
 };
-export default Requests;
+export default Routes;

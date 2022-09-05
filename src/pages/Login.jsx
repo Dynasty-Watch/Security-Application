@@ -1,8 +1,10 @@
+/* eslint-disable eqeqeq */
+/* eslint-disable no-unused-vars */
 import {
   IonButton,
   IonContent,
   IonHeader,
-  IonIcon,
+  
   IonInput,
   IonPage,
   IonTitle,

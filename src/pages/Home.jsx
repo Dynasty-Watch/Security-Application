@@ -1,29 +1,16 @@
 import {
-  IonCol,
-  IonContent,
-  IonHeader,
-  IonPage,
-  IonRow,
-  IonTitle,
-  IonToolbar,
-  useIonModal,
-  useIonViewWillEnter,
-  IonTabs,
-  IonTab,
+    IonTabs,
   IonTabButton,
-  IonMenu,
-  IonList,
-  IonListHeader,
-  IonMenuToggle,
-  IonIcon,
-  IonItem,
   IonLabel,
   IonApp,
   IonRouterOutlet,
-  IonTabBar
+  IonTabBar,
+
 } from "@ionic/react";
 import { Redirect, Route } from "react-router-dom";
 import { IonReactRouter } from "@ionic/react-router";
+import { supabase } from "../SupabaseClient";
+import React, {useEffect, useState} from "react";
 
 import Tab1 from "./Tab1";
 import Tab2 from "./Tab2";
@@ -31,14 +18,25 @@ import Tab3 from "./Tab3";
 
 //Routes Component after authentication
 const Home = () => {
+  const [session, setSession] = useState(null);
+  useEffect(() => {
+    setSession(supabase.auth.session())
+    console.log(session)
+    supabase.auth.onAuthStateChange((_event, session) => {
+      setSession(session)
+    })
+  }, [session])
   return (
     <IonApp>
       <Tab1 />
       <IonReactRouter>
         <IonTabs>
           <IonRouterOutlet>
-            <Route exact path="/tab1">
-              <Tab1 />
+          <Route exact path="/home" render={() => {
+              return session ?<Redirect to="/tab1"/> : <Home/>;
+            }} />
+            <Route path="/tab1">
+              <Tab1/>
             </Route>
             <Route exact path="/tab2">
               <Tab2 />

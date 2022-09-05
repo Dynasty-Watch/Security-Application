@@ -9,12 +9,12 @@ import { GoogleMap } from "@capacitor/google-maps";
 import { markers } from "../data";
 import { UseMarkers } from "../data";
 import { supabase } from "../SupabaseClient";
+import "./Map.css";
 import { heartOutline, locationOutline, navigateOutline, phonePortraitOutline } from "ionicons/icons";
 import {
     useJsApiLoader,
     GoogleMap as Rmap,
     Marker ,
-    Autocomplete,
     DirectionsRenderer,
   } from '@react-google-maps/api'
   import { Geolocation } from "@capacitor/geolocation";
@@ -71,13 +71,9 @@ const Map = () => {
                     </IonRow>
     
                     <IonRow>
-                        <IonButton onClick={dismiss}>
-                            <IonIcon icon={heartOutline} />&nbsp;
-                            Accept
-                        </IonButton>
                         <IonButton {...page} onClick={handleClick}>
                             <IonIcon icon={navigateOutline}/>&nbsp;
-                            Accept
+                            Navigate
                         </IonButton>
                     </IonRow>
                 </IonGrid>
@@ -183,17 +179,22 @@ const Map = () => {
     };
 
     const { isLoaded } = useJsApiLoader({
-        googleMapsApiKey: "AIzaSyAIB2cC62_gWE8woaK9xqoKDjoLSht_5zQ",
+        googleMapsApiKey: "AIzaSyAsbwt4GElIq_C9duQZxcb2tiX3luBGuRo",
         libraries,
       });
       const [map, setMap] = useState(/** @type google.maps.Map */ (null))
   const [directionsResponse, setDirectionsResponse] = useState(null)
   const [distance, setDistance] = useState('')
   const [duration, setDuration] = useState('')
+  const [cpostion, setCpostion] = useState({
+    lati: 0,
+    longi: 0,
+  })
   const [ position,setPosition] = useState({
     latitude : 0,
     longitude: 0,
 });
+
 useEffect(() => {
     getLocation();
 }, []);
@@ -207,26 +208,23 @@ const getLocation = async () => {
         latitude : val.coords.latitude,
         longitude : val.coords.longitude,
         });
+        setCpostion({
+            lati: -26.184735805508335, 
+            longi: 27.979532669670185
+        });
     });
 };
-
-  /** @type React.MutableRefObject<HTMLInputElement> */
-  const destiantionRef = useRef()
-
-
-
-  async function calculateRoute() {
-    if (destiantionRef.current.value === '') {
-      return
-    }
+async function calculateRoute() {
+    
     // eslint-disable-next-line no-undef
     const directionsService = new google.maps.DirectionsService()
     const results = await directionsService.route({
         origin: new google.maps.LatLng(position.latitude, position.longitude),
-      destination: destiantionRef.current.value,
+      destination: new google.maps.LatLng(cpostion.lati, cpostion.longi),
       // eslint-disable-next-line no-undef
       travelMode: google.maps.TravelMode.DRIVING,
     })
+    
     setDirectionsResponse(results)
     setDistance(results.routes[0].legs[0].distance.text)
     setDuration(results.routes[0].legs[0].duration.text)
@@ -244,14 +242,13 @@ const getLocation = async () => {
         }}></capacitor-google-map >
         </>)} 
         
-        {page == 2 && (
+        {page == 2 && isLoaded && (
             <>
-            <Autocomplete>
-              <IonInput type='text' placeholder='Destination' ref={destiantionRef} />
-            </Autocomplete>
-            <IonButton  type='submit' onClick={calculateRoute}>
+                    <div className="buttons">
+            <IonButton type='submit' onClick={calculateRoute}>
               Calculate Route
-            </IonButton>
+            </IonButton> 
+            <IonButton>Done</IonButton></div>
             <p>Distance: {distance} </p>
           <p>Duration: {duration} </p>
             <Rmap
@@ -261,6 +258,10 @@ const getLocation = async () => {
         }}
           zoom={15}
           mapContainerStyle={{ width: '100%', height: '100%' }}
+          options={{
+            mapTypeControl: false,
+            fullscreenControl: false,
+          }}
          
           onLoad={map => setMap(map)}
         >

@@ -1,0 +1,42 @@
+.user_div{
+    padding: 20px;
+    height: 810px;
+    align-content: center;
+    padding-top: 40px;
+    background: #abbaab;  /* fallback for old browsers */
+    background: -webkit-linear-gradient(to right, #ffffff, #abbaab);  /* Chrome 10-25, Safari 5.1-6 */
+    background: linear-gradient(to right, #ffffff, #abbaab); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+
+}
+
+.first_div{
+    align-items: center;
+    padding-left: 40%;
+}
+
+.username{
+    font-size: 18px;
+    background-color: #abbaab;  /* fallback for old browsers */
+    background-color: -webkit-linear-gradient(to right, #ffffff, #abbaab);  /* Chrome 10-25, Safari 5.1-6 */
+    background-color: linear-gradient(to right, #ffffff, #abbaab); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+    font-weight: 600;
+}
+
+.user_back{
+    align-items: center;
+    height: 100px;
+    width: 80px;
+    border:3px solid white;
+    background-position: top;
+    background-size: cover;
+    background-repeat: no-repeat;
+    border-radius: 7px;
+    padding-left: 100px;
+}
+
+
+
+/* Margo */
+/* background: #FFEFBA;  /* fallback for old browsers */
+/* background: -webkit-linear-gradient(to right, #FFFFFF, #FFEFBA);  Chrome 10-25, Safari 5.1-6 */
+/* background: linear-gradient(to right, #FFFFFF, #FFEFBA); W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */ 
