@@ -1,55 +1,68 @@
+/* eslint-disable no-unused-vars */
 /* eslint-disable new-parens */
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, {useState, useEffect}from "react";
-import { useIonToast, useIonLoading, IonContent, IonList, IonItem } from "@ionic/react"
+import { useIonToast, useIonLoading, IonContent, IonList, IonItem, IonCard, IonLabel } from "@ionic/react"
 import { supabase } from "../SupabaseClient";
 
 export const History = () => {
     const [showLoading, hideLoading] = useIonLoading();
     const [showToast] = useIonToast();
-    const [requests, setRequests] = useState({
-        RequestID: "",
-        CrimeType: "",
-        Summary: "",
-        Accepted: "",
-    });
-
-    useEffect(()=> {
-        getHistory();
-    },[]);
-    
-    const getHistory = async () => {
-        console.log("get");
-        await showLoading();
-        try
-        {
-            let { data, error, status } = await supabase
-            .from('EmergencyRequest')
-            .select(`RequestID,CrimeType, Summary, Accepted`)
-            .eq('Accepted', true)
-            if (error && status !== 406) {
-                throw error;
-              }
-              if (data) {
-                setRequests({
-                    RequestID: data.RequestID,
-                    CrimeType: data.CrimeType,
-                    Summary: data.Summary,
-                    Accepted: data.Accepted,
-        });
+   const requests  = [
+    {
+        RequestID : 1,
+        CrimeType : "Assault",
+        Summary : "Man beat me",
+        Accepted : false
+    },
+    {
+        id : 2,
+        Type : "Robbery",
+        Summary: "group of teens",
+        Accepted: true
+    },{
+        id : 3,
+        Type : "Armed Robbery",
+        Summary: "Group of men in bmw",
+        Accepted : false
+    },
+    {
+        id : 4,
+        Type : "Hijacking",
+        Summary : "",
+        Accepted : false
+    },{
+        id : 5,
+        Type : "Organized Crime",
+        Summary: "Will i get paid for this information",
+        Accepted: true
+    },{
+        id : 6,
+        Type : "Shoplifting",
+        Summary : "",
+        Accepted : true
+    },{
+        id : 7,
+        Type : "Sexual Offence",
+        Summary : "i was attacked in a dark alley",
+        Accepted : false
+    },{
+        id : 8,
+        Type : "Kidnapping",
+        Summary : "",
+        Accepted : false
     }
-    } catch (error) {
-    showToast({ message: error.message, duration: 3000 });
-    } finally {
-    await hideLoading();
-    }
-    };
+]
 
     return(
         <IonContent>
             <IonList>
             {requests.map((e) => (
-                <IonItem key={e.RequestID}>{e.CrimeType}<br/>{e.Summary}<br/>{e.Accepted}</IonItem>
+                <IonItem  key={e.RequestID}><IonCard>
+                    <IonLabel>Type:</IonLabel>{e.CrimeType}<br/>
+                <IonLabel>Summary:</IonLabel>{e.Summary}<br/>
+                <IonLabel>Accepted:</IonLabel>{e.Accepted}
+                </IonCard></IonItem>
             ))}
             </IonList>
         </IonContent>

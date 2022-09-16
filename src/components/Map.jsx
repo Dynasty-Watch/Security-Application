@@ -240,8 +240,8 @@ async function calculateRoute() {
         <>
         <capacitor-google-map ref={mapRef} id="map" style={{
             display: 'inline-block',
-            width: '300px',
-            height: '570px',
+            width: '100vw',
+            height: '100vh',
             position: 'absolute'
         }}></capacitor-google-map >
         </>)} 
