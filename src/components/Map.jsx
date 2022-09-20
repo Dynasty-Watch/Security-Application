@@ -4,7 +4,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable no-unused-vars */
 import React, { useState, useRef, useEffect } from "react";
-import { useIonModal, IonLoading ,IonButton, IonCol, IonContent, IonGrid, IonIcon, IonLabel, IonNote, IonRow } from '@ionic/react';
+import { useIonModal, IonLoading ,IonButton, IonCol, IonContent, IonGrid, IonIcon, IonLabel, IonNote, IonRow, IonItem } from '@ionic/react';
 import { GoogleMap } from "@capacitor/google-maps";
 import { markers } from "../data";
 import { UseMarkers } from "../data";
@@ -27,13 +27,13 @@ const Map = () => {
         setPage(1);
       }, []);
       const [showLoading, setShowLoading] = useState(false);
-    const MarkerInfoWindow = ({ marker, dismiss, page}) => {
+    const MarkerInfoWindow = ({ marker, page}) => {
        
         const handleClick = () =>{
             setPage(2);
             console.log("Clicked");
             setShowLoading(true)
-            dismiss();
+           
         }; 
         return (
             <IonContent key={marker.markerID}>
@@ -74,9 +74,10 @@ const Map = () => {
                     </IonRow>
     
                     <IonRow>
-                        <IonButton {...page} onClick={handleClick}>
+                        <IonButton {...page}  onClick={handleClick}>
+                            <IonItem button onClick={dismiss} color="primary">
                             <IonIcon icon={navigateOutline}/>&nbsp;
-                            Navigate
+                            Navigate</IonItem>
                         </IonButton>
                     </IonRow>
                 </IonGrid>
