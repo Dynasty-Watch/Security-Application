@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable eqeqeq */
 import {
   IonButton,
   IonContent,
@@ -100,7 +102,7 @@ const Register: React.FC = () => {
         />
 
         <IonInput
-          placeholder="Password:"
+         placeholder="Password:"
           onIonChange={(e: any) => setPassword(e.target.value)}
         />
 
@@ -114,7 +116,7 @@ const Register: React.FC = () => {
         </IonButton>
 
         <p>
-          Have an account already? <Link to="/login">click here</Link>
+          Have an account already? <Link to="/">click here</Link>
         </p>
       </IonContent>
     </IonPage>

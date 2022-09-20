@@ -1,3 +1,5 @@
+/* eslint-disable eqeqeq */
+/* eslint-disable no-unused-vars */
 import {
     IonButton,
     IonContent,
@@ -111,7 +113,7 @@ const ForgotPassword = () => {
                         </div>
                         <p>
                             <IonText color="dark">Back to Login </IonText>
-                            <Link to="/login">click here</Link>
+                            <Link to="/">click here</Link>
                         </p>
                     </IonContent>
                 </IonPage>

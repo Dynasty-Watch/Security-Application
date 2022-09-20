@@ -17,20 +17,19 @@ import {
     IonTitle,
     IonToolbar,
     useIonLoading,
-    useIonRouter,
     useIonToast,
   } from "@ionic/react";
   import { useEffect, useState } from "react";
   import { supabase } from "../SupabaseClient";
   import "./Profile.css";
   import { Avatar } from "../components/Avatar";
-  import { lockClosed, lockClosedOutline } from "ionicons/icons";
-  
+  import { lockClosedOutline } from "ionicons/icons";
+  import { useHistory } from "react-router";
   const Tab3 = () => {
     const [showLoading, hideLoading] = useIonLoading();
     const [showToast] = useIonToast();
     const [session] = useState(() => supabase.auth.session());
-    const router = useIonRouter();
+    const router = useHistory();
     const [profile, setProfile] = useState({
 		firstName: "",
         lastName: "",
@@ -74,7 +73,7 @@ import {
 	};
 	const signOut = async () => {
 		await supabase.auth.signOut();
-		router.push('/', 'forward', 'replace');
+		router.push('/');
 	  }
 
 	  const updateProfile = async (e) => {
