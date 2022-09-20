@@ -5,6 +5,7 @@ import {
   IonApp,
   IonRouterOutlet,
   IonTabBar,
+  IonIcon,
 
 } from "@ionic/react";
 import { Redirect, Route } from "react-router-dom";
@@ -15,6 +16,7 @@ import React, {useEffect, useState} from "react";
 import Tab1 from "./Tab1";
 import Tab2 from "./Tab2";
 import Tab3 from "./Tab3";
+import { listOutline, locateOutline, personCircleOutline } from "ionicons/icons";
 
 //Routes Component after authentication
 const Home = () => {
@@ -51,15 +53,16 @@ const Home = () => {
 
           <IonTabBar slot="bottom">
             <IonTabButton selected tab="tab1" href="/tab1">
-              {/* <IonIcon icon={triangle} /> */}
+               <IonIcon icon={locateOutline} /> 
+               
               <IonLabel>Request</IonLabel>
             </IonTabButton>
             <IonTabButton tab="tab2" href="/tab2">
-              {/* <IonIcon icon={ellipse} /> */}
+              <IonIcon icon={listOutline} />
               <IonLabel>History</IonLabel>
             </IonTabButton>
             <IonTabButton tab="tab3" href="/tab3">
-              {/* <IonIcon icon={square} /> */}
+              <IonIcon icon={personCircleOutline} />
               <IonLabel>Profile</IonLabel>
             </IonTabButton>
           </IonTabBar>
