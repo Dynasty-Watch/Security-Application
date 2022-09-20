@@ -21,7 +21,7 @@ export const History = () => {
 }, []);
 
 const getHistory = async () => {
-        
+      await  showLoading(true);
     let { data , error } = await supabase
         .from('EmergencyRequest')
         .select('CrimeType, Summary')
@@ -46,7 +46,7 @@ const getHistory = async () => {
            })
 
     })
-   
+   await hideLoading();
     };
  
     return(

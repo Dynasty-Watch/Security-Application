@@ -124,7 +124,8 @@ const Map = () => {
                     lat: location.RequestLat,
                     lng: location.RequestLng
                 },
-                title: location.CrimeType
+                title: location.CrimeType,
+                snippet: location.Summary,
             });
         });
 
