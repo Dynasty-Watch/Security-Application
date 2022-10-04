@@ -1,3 +1,4 @@
+/* eslint-disable no-use-before-define */
 /* eslint-disable no-unused-vars */
 /* eslint-disable new-parens */
 /* eslint-disable react-hooks/exhaustive-deps */
@@ -6,7 +7,7 @@ import { useIonToast, useIonLoading, IonContent, IonList, IonItem, IonCard, IonL
 import { supabase } from "../SupabaseClient";
 import RequestHistory from "./RequestHistory.css"
 import { compassOutline } from "ionicons/icons";
-
+import ActiveItem from "./ActiveItem";
 export const History = () => {
     const [showLoading, hideLoading] = useIonLoading();
     const [showToast] = useIonToast();
@@ -30,6 +31,7 @@ export const History = () => {
 
 }, []);
 
+
 const getHistory = async () => {
       await  showLoading(true);
     let { data , error } = await supabase
@@ -45,6 +47,7 @@ const getHistory = async () => {
 
     setItems({
         list : requests.map(function(d, index){
+            
             return (<IonList key={index}>
                 <IonCard className="history">
                 <IonLabel>Type: </IonLabel>
@@ -60,66 +63,32 @@ const getHistory = async () => {
     };
     const getActive = async () => {
        
-      let { data : act , error : err } = await supabase
+      let { data  , error : err } = await supabase
           .from('EmergencyRequest')
           .select('RequestID, CrimeType, Summary, RequestLat, RequestLng')
           .eq('Accepted', false)
-          .order("RequestID", {ascending: true})
+          .order("RequestID", {ascending: false})
   
       if (err) throw new (err.message)
-      if ( act == null) throw new ("No Requests at the moment")
+      if ( data == null) throw new ("No Requests at the moment")
   
-      console.log(act );
-      const activerequests = act;
-  
+      console.log(data );
+      const activerequests = data;
+      
       setItem({
-          active : activerequests.map(function( act, index){
+          active : activerequests.map(function( act){
+            setItem([act]);
               return (
-                <form  onSubmit={updateStatus}>
-              <IonList key={index}>
-                  <IonCard className="history">
-                <IonLabel> Request # : </IonLabel>
-                    {act.RequestID}
-                  <IonLabel>Type: </IonLabel>
-                 {act.CrimeType}<br/>
-                 <IonLabel>Summary: </IonLabel>
-                 {act.Summary} <br/>
-
-                 <IonLabel>Lat:{act.RequestLat} Lng: {act.RequestLng} </IonLabel>
-                 <IonButton type="submit">Completed</IonButton>
-                  </IonCard>
-                  </IonList>
-                  </form>)
+                <ActiveItem  key={act.RequestId} act={act}></ActiveItem>
+              
+                 )
              })
-
-  
-      })
-      const updateStatus = async (e) => {
-		e?.preventDefault();
-	
-		console.log('update ');
-		await showLoading();
-	
-		try {
-		  const user = supabase.auth.user();
-	
-		 
-		  let { error } = await supabase.from('EmergencyRequest')
-          .update({Accepted: true})
-          .eq("RequestID", act.RequestID)
-    
-	
-		  if (error) {
-			throw error;
-		  }
-		} catch (error) {
-		  showToast({ message: error.message, duration: 5000 });
-		} finally {
-		  await hideLoading();
-		};
-    };
+      });
+      
      await hideLoading();
       };
+
+
 
      
     return(
