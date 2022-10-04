@@ -5,20 +5,26 @@ import { IonCard, IonLabel,  IonButton } from "@ionic/react"
 
 const ActiveItem = ({act}) => {
     const [isAccepted ,  setAccepted] = useState(false);
-
+	
     const ActAccepted = async () => {
+		console.log('update ');
+		const updates ={
+			Accepted : !isAccepted,
+		};
+		
         const { data, error} = await supabase
         .from("EmergencyRequest")
-        .update({ Accepted : !isAccepted})
+        .update(updates, {	returning: 'minimal',})
         .eq("RequestID", act.RequestID)
         .single();
 
         if (error) {
             console.error(error);
         }
-        setAccepted(data.Accepted)
-    };
-
+        setAccepted(data.Accepted);
+	
+   
+	}
     return  (
         <div>
                 <IonCard className="history">
