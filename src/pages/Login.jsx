@@ -64,7 +64,7 @@ const Login = () => {
           <IonTitle>Login Page</IonTitle>
         </IonToolbar>
       </IonHeader>
-      <IonContent className="ion-padding" color="secondary">
+      <IonContent className="ion-padding" >
         <IonLoading
           isOpen={showLoading}
           onDidDismiss={() => setShowLoading(false)}
@@ -92,6 +92,7 @@ const Login = () => {
               <IonCol className="ion-align-self-center">
                 <IonInput
                   color="dark"
+                  type="password"
                   placeholder="Password:"
                   onIonChange={(e) => setPassword(e.target.value)}
                 />

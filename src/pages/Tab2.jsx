@@ -39,15 +39,6 @@ const Tab2 = () => {
 
     return(
         <IonPage>
-            <IonHeader>
-                
-                    <IonToolbar>
-                        <IonTitle>
-                        History
-                        </IonTitle>
-                    </IonToolbar>
-               
-            </IonHeader>
             <IonContent>
                <History/>
           

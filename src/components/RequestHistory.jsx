@@ -3,18 +3,16 @@
 /* eslint-disable new-parens */
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, {useState, useEffect}from "react";
-import { useIonToast, useIonLoading, IonContent, IonList, IonItem, IonCard, IonLabel, IonSelect, IonSelectOption, IonHeader, IonToolbar, IonSegment, IonSegmentButton, IonButton } from "@ionic/react"
+import { useIonToast, useIonLoading, IonContent, IonList, IonItem, IonCard, IonLabel, IonSelect, IonSelectOption, IonHeader, IonToolbar, IonSegment, IonSegmentButton, IonButton, IonIcon } from "@ionic/react"
 import { supabase } from "../SupabaseClient";
 import RequestHistory from "./RequestHistory.css"
-import { compassOutline } from "ionicons/icons";
+import { sadOutline } from "ionicons/icons";
 import ActiveItem from "./ActiveItem";
 export const History = () => {
     const [showLoading, hideLoading] = useIonLoading();
     const [showToast] = useIonToast();
     const [listactive, setListActive] = useState(true);
-    const [status, setStatus] = useState({
-        Accepted: true,
-    });
+ 
     const [items, setItems] = useState({
         list : [],
        
@@ -56,7 +54,7 @@ const getHistory = async () => {
                {d.Summary}
                 </IonCard>
                 </IonList>)
-           })
+           }) 
 
     })
    await hideLoading();
@@ -65,7 +63,7 @@ const getHistory = async () => {
        
       let { data  , error : err } = await supabase
           .from('EmergencyRequest')
-          .select('RequestID, CrimeType, Summary, RequestLat, RequestLng')
+          .select('RequestID, CrimeType, Summary, Accepted, RequestLat, RequestLng')
           .eq('Accepted', false)
           .order("RequestID", {ascending: false})
   
@@ -78,10 +76,12 @@ const getHistory = async () => {
       setItem({
           active : activerequests.map(function( act){
             setItem([act]);
+            
               return (
-                <ActiveItem  key={act.RequestId} act={act}></ActiveItem>
-              
-                 )
+               
+                    
+                      <ActiveItem  key={act.RequestId} act={act}></ActiveItem>
+               ) 
              })
       });
       
@@ -104,11 +104,25 @@ const getHistory = async () => {
         <IonContent>
             { listactive ? (
                 <>
-                {item.active}
+                
+                    
+                    {item.active}
+                    
                 </>
+                
             ) : (
                 <>
-                {items.list}
+                 {items.list.length === 0 ? (
+                    <>
+                    <span className="Null"> Nothing to show</span>
+                    <br/><br/><br/><br/>
+                    <IonIcon size="large" className="Nuller" icon={sadOutline}></IonIcon>
+                    </>
+                ) : (
+                    <>
+                    {items.list}
+                    </>
+                )}
                 </>
             )}
             <div>

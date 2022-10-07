@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import {
     IonTabs,
   IonTabButton,
@@ -20,6 +21,12 @@ import { listOutline, locateOutline, personCircleOutline } from "ionicons/icons"
 
 //Routes Component after authentication
 const Home = () => {
+  const mySubscription = supabase
+  .from('EmergencyRequest')
+  .on('*', payload => {
+    console.log("Change recieved",payload)
+  })
+  .subscribe();
   const [session, setSession] = useState(null);
   useEffect(() => {
     setSession(supabase.auth.session())

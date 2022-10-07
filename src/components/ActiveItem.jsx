@@ -1,20 +1,22 @@
 import { useState } from "react";
 import { supabase } from "../SupabaseClient";
-import { IonCard, IonLabel,  IonButton } from "@ionic/react"
+import { IonCard, IonLabel,  IonButton, useIonLoading } from "@ionic/react"
 
 
 const ActiveItem = ({act}) => {
-    const [isAccepted ,  setAccepted] = useState(false);
+    const [  isAccepted ,setAccepted] = useState(act.Accepted);
+    const [showLoading, hideLoading] = useIonLoading();
+    
 	
     const ActAccepted = async () => {
 		console.log('update ');
-		const updates ={
-			Accepted : !isAccepted,
-		};
+        await showLoading();
 		
+		try{
         const { data, error} = await supabase
         .from("EmergencyRequest")
-        .update(updates, {	returning: 'minimal',})
+        .update({Accepted : !isAccepted}, {	
+        returning: 'minimal',})
         .eq("RequestID", act.RequestID)
         .single();
 
@@ -22,21 +24,26 @@ const ActiveItem = ({act}) => {
             console.error(error);
         }
         setAccepted(data.Accepted);
-	
+    } catch (error) {
+        console.log("Error", error);
+      } finally {
+       
+        await hideLoading();
+      };
    
 	}
     return  (
         <div>
-                <IonCard className="history">
-                <IonLabel> Request# </IonLabel>
+                <IonCard className="active">
+                <IonLabel><b><b>Request#</b></b></IonLabel>
                     {act.RequestID}
 					<br/>
-                  <IonLabel>Type: </IonLabel>
+                  <IonLabel> <b><b>Type:</b></b></IonLabel>
                  {act.CrimeType}<br/>
-                 <IonLabel>Summary: </IonLabel>
+                 <IonLabel><b><b>Summary:</b></b> </IonLabel>
                  {act.Summary} <br/>
 
-                 <IonLabel>Lat:{act.RequestLat} Lng: {act.RequestLng} </IonLabel>
+                 <IonLabel><b><b>Lat:</b></b>{act.RequestLat} <b><b>Lng:</b></b> {act.RequestLng} </IonLabel>
                  <IonButton onClick={ActAccepted}>Completed</IonButton>
                   </IonCard>
 
