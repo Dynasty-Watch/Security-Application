@@ -4,7 +4,7 @@ import {
   IonButton,
   IonContent,
   IonHeader,
-  
+  useIonToast,
   IonInput,
   IonPage,
   IonTitle,
@@ -28,6 +28,7 @@ const Login = () => {
   const [password, setPassword] = useState();
   const [showLoading, setShowLoading] = useState(false);
   const [session, setSession] = useState(null);
+  const [showToast] = useIonToast();
   const [errorMessage, setErrorMessage] = useState("");
   const emailFormat =
     "/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:.[a-zA-Z0-9-]+)*$/";
@@ -51,7 +52,8 @@ const Login = () => {
       if (session != null) history.push("/tab1");
 
     } catch (error) {
-      alert(error);
+      showToast({message: error.message, duration: 3000});
+			
     } finally {
       setShowLoading(false);
     }
@@ -64,7 +66,7 @@ const Login = () => {
           <IonTitle>Login Page</IonTitle>
         </IonToolbar>
       </IonHeader>
-      <IonContent className="ion-padding" >
+      <IonContent className="ion-padding" color="secondary">
         <IonLoading
           isOpen={showLoading}
           onDidDismiss={() => setShowLoading(false)}
