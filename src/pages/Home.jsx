@@ -41,7 +41,7 @@ const Home = () => {
       <IonReactRouter>
         <IonTabs>
           <IonRouterOutlet>
-          <Route exact path="/home" render={() => {
+          <Route exact path="/tab1" render={() => {
               return session ?<Redirect to="/tab1"/> : <Home/>;
             }} />
             <Route path="/tab1">

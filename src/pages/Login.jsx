@@ -48,7 +48,7 @@ const Login = () => {
       if (error) console.log(error);
       else setSession(session.access_token)
 
-      if (session != null) history.push("/home");
+      if (session != null) history.push("/tab1");
 
     } catch (error) {
       alert(error);

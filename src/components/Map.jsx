@@ -86,7 +86,7 @@ const Map = () => {
     };
     
     let newMap;
-    const key = "AIzaSyAIB2cC62_gWE8woaK9xqoKDjoLSht_5zQ";
+    const key = "AIzaSyC6d-uHz50G0AYmv3Ikio5G8SWKw_8ICiA" ;
     const mapRef = useRef(null);
     let requests;
     
@@ -188,7 +188,7 @@ const Map = () => {
     };
 
     const { isLoaded } = useJsApiLoader({
-        googleMapsApiKey: "AIzaSyAsbwt4GElIq_C9duQZxcb2tiX3luBGuRo",
+        googleMapsApiKey: "AIzaSyC6d-uHz50G0AYmv3Ikio5G8SWKw_8ICiA",
         libraries,
       });
       const [map, setMap] = useState(/** @type google.maps.Map */ (null))
@@ -256,7 +256,7 @@ async function calculateRoute() {
             <IonButton type='submit' onClick={calculateRoute}>
               Calculate Route
             </IonButton> 
-            <IonButton href="/home">Done</IonButton></div>
+            <IonButton href="/tab1">Done</IonButton></div>
             <p>Distance: {distance} </p>
           <p>Duration: {duration} </p>
           <IonLoading isOpen={showLoading} onDidDismiss={()=> setShowLoading(false)} message={"Loading"} duration={5000}></IonLoading>

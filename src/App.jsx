@@ -45,10 +45,10 @@ const App = () => {
     <IonReactRouter>
       <IonRouterOutlet>
       <Route exact path="/" render={() => {
-              return session ? <Redirect to="/home"/> : <Login/>;
+              return session ? <Redirect to="/tab1"/> : <Login/>;
             }} />
         <Route path="/register" component={Register} exact />
-        <Route path="/home" component={Home} exact />
+        <Route path="/tab1" component={Home} exact />
         <Route path="/forgotPassword" component={ForgotPassword} exact />
       </IonRouterOutlet>
     </IonReactRouter>
