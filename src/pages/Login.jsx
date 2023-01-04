@@ -107,7 +107,7 @@ const Login = () => {
 
         <IonCol className="ion-align-self-center">
           <p>
-            <IonText color="dark">Don't have an account? </IonText>
+            <IonText color="dark">Don't have an account yet? </IonText>
             <Link to="/register">click here</Link>
           </p>
           <p>
