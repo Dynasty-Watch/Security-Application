@@ -1,10 +1,7 @@
-/* eslint-disable eqeqeq */
-/* eslint-disable no-unused-vars */
 import {
   IonButton,
   IonContent,
   IonHeader,
-  
   IonInput,
   IonPage,
   IonTitle,
@@ -24,25 +21,26 @@ import Logo from "../images/Dynasty Watch logo.jpeg";
 import "./login.css";
 
 const Login = () => {
-  const [userEmail, setUserEmail] = useState();
-  const [password, setPassword] = useState();
+  const history = useHistory();
   const [showLoading, setShowLoading] = useState(false);
   const [session, setSession] = useState(null);
   const [errorMessage, setErrorMessage] = useState("");
-  const emailFormat =
-    "/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:.[a-zA-Z0-9-]+)*$/";
-  const history = useHistory();
+  const [formData, setFormData] = useState({
+    userEmail: "",
+    password: ""
+  })
 
   const loginUser = async (e) => {
     e.preventDefault();
     setShowLoading(true);
+    const emailFormat = "/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:.[a-zA-Z0-9-]+)*$/";
 
-    if (userEmail != emailFormat) setErrorMessage("Email is not valid");
+    if (formData.userEmail != emailFormat) setErrorMessage("Email is not valid");
 
     try {
       const { session, error } = await supabase.auth.signIn({
-        email: userEmail,
-        password: password
+        email: formData.userEmail,
+        password: formData.password
       });
 
       if (error) console.log(error);
@@ -55,6 +53,16 @@ const Login = () => {
     } finally {
       setShowLoading(false);
     }
+  }
+
+  const authenticateUser = async (email, password) => {
+    await supabase.auth.signIn({
+      email: formData.userEmail,
+      password: formData.password
+    }).then((session, error) => {
+      error ? console.log(error) : setSession(session.access_token);
+      session != null ?? history.push("./Home");
+    }).catch(error => console.log(error.message))
   }
 
   return (
@@ -79,7 +87,8 @@ const Login = () => {
                 <IonInput
                   color="dark"
                   placeholder="Email:"
-                  onIonChange={(e) => setUserEmail(e.target.value)}
+                  value={formData.userEmail}
+                  onIonChange={(e) => setFormData({ ...formData, userEmail: e.target.value })}
                 />
               </IonCol>
             </IonRow>
@@ -93,7 +102,8 @@ const Login = () => {
                 <IonInput
                   color="dark"
                   placeholder="Password:"
-                  onIonChange={(e) => setPassword(e.target.value)}
+                  value={formData.password}
+                  onIonChange={(e) => setFormData({ ...formData, password: e.target.value })}
                 />
               </IonCol>
             </IonRow>

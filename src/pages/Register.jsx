@@ -15,41 +15,44 @@ import { supabase } from "../SupabaseClient";
 import { useHistory } from "react-router-dom";
 import "./Home.css";
 
-const Register: React.FC = () => {
-  const [name, setName] = useState();
-  const [surname, setSurname] = useState();
-  const [securityID, setSecurityID] = useState();
-  const [cellNo, setCellNo] = useState();
-  const [email, setEmail] = useState();
-  const [password, setPassword] = useState();
-  const [cPassword, setCPassword] = useState();
+const Register = () => {
   const [showLoading, setShowLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
+  const [formData, setFormData] = useState({
+    name: "",
+    surname: "",
+    securityID: "",
+    cellNo: "",
+    email: "",
+    password: "",
+    cPassword: "",
+  });
+
   const emailFormat =
     "/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:.[a-zA-Z0-9-]+)*$/";
   const history = useHistory();
 
-  const registerUser = async (e: any) => {
+  const registerUser = async (e) => {
     e.preventDefault();
     setShowLoading(true);
 
-    if (password != cPassword) setErrorMessage("Passwords do not match");
-    if (email != emailFormat) setErrorMessage("Email is not valid");
+    if (formData.password != formData.cPassword) setErrorMessage("Passwords do not match");
+    if (formData.email != emailFormat) setErrorMessage("Email is not valid");
 
     try {
       const { user } = await supabase.auth.signUp({
-        email: email,
-        password: password,
+        email: formData.email,
+        password: formData.password,
       });
 
       const { error } = await supabase.from("SecurityInfo").insert({
         userId: user?.id,
-        firstName: name,
-        lastName: surname,
-        email: email,
-        phone: cellNo,
-        securityId: securityID,
-        Password: password,
+        firstName: formData.name,
+        lastName: formData.surname,
+        email: formData.email,
+        phone: formData.cellNo,
+        securityId: formData.securityID,
+        Password: formData.password,
       });
 
       if (error) console.log(error);
@@ -76,37 +79,44 @@ const Register: React.FC = () => {
         />
         <IonInput
           placeholder="Name:"
-          onIonChange={(e: any) => setName(e.target.value)}
+          value={formData.name}
+          onIonChange={e => setFormData({ ...formData, name: e.target.valid })}
         />
 
         <IonInput
           placeholder="Surname:"
-          onIonChange={(e: any) => setSurname(e.target.value)}
+          value={formData.surname}
+          onIonChange={e => setFormData({ ...formData, surname: e.target.value })}
         />
 
         <IonInput
           placeholder="Security ID:"
-          onIonChange={(e: any) => setSecurityID(e.target.value)}
+          value={formData.securityID}
+          onIonChange={e => formData({ ...formData, securityID: e.target.valid })}
         />
 
         <IonInput
           placeholder="Cell number:"
-          onIonChange={(e: any) => setCellNo(e.target.value)}
+          value={formData.cellNo}
+          onIonChange={e => setFormData({ ...formData, cellNo: e.target.value })}
         />
 
         <IonInput
           placeholder="Email:"
-          onIonChange={(e: any) => setEmail(e.target.value)}
+          value={formData.email}
+          onIonChange={e => setFormData({ ...formData, email: e.target.valid })}
         />
 
         <IonInput
           placeholder="Password:"
-          onIonChange={(e: any) => setPassword(e.target.value)}
+          value={formData.password}
+          onIonChange={e => setFormData({ ...formData, password: e.target.value })}
         />
 
         <IonInput
           placeholder="Confirm Password:"
-          onIonChange={(e: any) => setCPassword(e.target.value)}
+          value={formData.cPassword}
+          onIonChange={e => setFormData({ ...formData, cPassword: e.target.valid })}
         />
 
         <IonButton onClick={(e) => registerUser(e)} color="dark">
